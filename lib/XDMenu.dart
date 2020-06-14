@@ -2,15 +2,42 @@ import 'package:cwrcalc/rounded_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+class XDMenu extends StatefulWidget {
+  @override
+  _XDMenuState createState() => _XDMenuState();
+}
 
-class XDMenu extends StatelessWidget {
-  XDMenu({
-    Key key,
-  }) : super(key: key);
+class _XDMenuState extends State<XDMenu> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      print(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(bottomNavigationBar: BottomNavigationBar(
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          title: Text('Setting'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.info_outline),
+          title: Text('Support'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person_outline),
+          title: Text('My Account'),
+        ),
+      ],
+      currentIndex: _selectedIndex,
+      selectedItemColor: Color(0xff097445),
+      onTap: _onItemTapped,
+    ),
       backgroundColor: const Color(0xffffffff),
       body: Container(
         decoration: BoxDecoration(
@@ -97,89 +124,6 @@ class XDMenu extends StatelessWidget {
                   SizedBox(
                     height: 30.0,
                   )
-                ],
-              ),
-            ),
-            Container(
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    child: FlatButton(
-                      onPressed: () {
-                        print('Settings');
-                      },
-                      child: Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.settings,
-                              color: Colors.black54,
-                            ),
-                            onPressed: () {
-                              print('Setting');
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 8.0),
-                            child: Text(
-                              'Setting',
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    child: FlatButton(
-                      onPressed: () {
-                        print('Support');
-                      },
-                      child: Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.info_outline),
-                            onPressed: () {
-                              print('Support');
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 8.0),
-                            child: Text(
-                              'Support',
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    child: FlatButton(
-                      onPressed: () {
-                        print('My Account');
-                      },
-                      child: Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.person_outline),
-                            onPressed: () {
-                              print('My Account');
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 8.0),
-                            child: Text(
-                              'My Account',
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
