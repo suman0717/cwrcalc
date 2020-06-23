@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 
 class RoundIconButton extends StatelessWidget {
-  RoundIconButton({this.icon, this.onPress});
+  RoundIconButton({this.icon, this.onPress,this.iconColor});
 
   final IconData icon;
   final Function onPress;
+  final Color iconColor;
 
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
-      child: Icon(icon,size: 18.0,color: Color(0xff097445),),
-      shape: CircleBorder(side: BorderSide(style: BorderStyle.solid,color: Color(0xff097445),)),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Icon(icon,size: 12.0,color: iconColor,),
+      ),
+      shape: CircleBorder(side: BorderSide(style: BorderStyle.solid,color: iconColor,)),
 //      fillColor: Colors.purpleAccent,
       constraints: BoxConstraints.tightFor(
         width: 30.0,
 
       ),
-      elevation: 6.0,
+//      elevation: 6.0,
       onPressed: onPress,
     );
   }

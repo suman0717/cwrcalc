@@ -1,13 +1,13 @@
+import 'package:cwrcalc/alert.dart';
 import 'package:cwrcalc/roundiconbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 int adjustementLength = 250;
 int neutralTemp = 38;
 int minAdjustedTemp = 28;
-double weldGap = 0;
+double weldGap = 5.0;
 
 class XDCalc extends StatefulWidget {
   @override
@@ -17,263 +17,319 @@ class XDCalc extends StatefulWidget {
 class _XDCalcState extends State<XDCalc> {
   int _selectedIndex = 0;
 
+  void reSetValue(){
+    adjustementLength = 250;
+    neutralTemp = 38;
+    minAdjustedTemp = 28;
+    weldGap = 5.0;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    reSetValue();
+    super.initState();
+  }
+  void showAlert(){
+    showDialog(context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context){
+        return CustomAlertDialog();
+      },
+    );
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      print(index);
-    });
+      if(index!=2){
+        showAlert();}
+    },);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Pull & Weld Calculator'),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                print('Close button pressed');
-              })
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('Setting'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.info_outline),
-            title: Text('Support'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            title: Text('My Account'),
-          ),
-        ],
-        onTap: _onItemTapped,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xff097445),
-      ),
-      backgroundColor: const Color(0xffffffff),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment(-0.63, -0.87),
-            end: Alignment(1.2, 1.05),
-            stops: [0.0, 1.0],
-            colors: [const Color(0xff02414d), const Color(0xff0a7449)],
-          ),
+    return SafeArea(
+      child: Scaffold(extendBodyBehindAppBar: true,
+        appBar: AppBar(
+//          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          title: Text('Pull & Weld Calculator'),
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
+          ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.info,
+                size: 20.0,
+              ),
+              title: Text('Info'),
+
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.drafts,
+                size: 20.0,
+              ),
+              title: Text('Support'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.account_circle,
+                size: 20.0,
+              ),
+              title: Text('Account'),
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Color(0xff37b033),
+          onTap: _onItemTapped,
+        ),
+        backgroundColor: const Color(0xffffffff),
+        body:
+        ListView(
           children: [
-            SizedBox(
-              height: 15.0,
-            ),
-            Center(
-              child: Text(
-                'Adjustment length',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            Center(
-              child: Text(
-                '${adjustementLength.toString()}m',
-                style: TextStyle(color: Colors.white, fontSize: 30.0),
-              ),
-            ),
-            Slider(
-                activeColor: Color(0xff5eb533),
-                min: 0,
-                max: 1000,
-                value: adjustementLength.toDouble(),
-                onChanged: (double value) {
-                  setState(() {
-                    adjustementLength = value.toInt();
-                  });
-                }),
             Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                  color: Colors.white),
+                gradient: LinearGradient(
+                  begin: Alignment(-0.63, -0.87),
+                  end: Alignment(1.2, 1.05),
+                  stops: [0.0, 1.0],
+                  colors: [const Color(0xff02414d), const Color(0xff0a7449)],
+                ),
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 20.0),
-                    child: Text('Other Adjustments'),
+                  SizedBox(
+                    height: 15.0,
                   ),
-                  Card(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Text(
-                              'Neutral Temp:',
-                              style: TextStyle(fontSize: 17.0),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                RoundIconButton(
-                                  icon: FontAwesomeIcons.minus,
-                                  onPress: () {
-                                    setState(() {
-                                      neutralTemp--;
-                                    });
-                                  },
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: Text(
-                                    '$neutralTemp°C',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                RoundIconButton(
-                                  icon: FontAwesomeIcons.plus,
-                                  onPress: () {
-                                    setState(() {
-                                      neutralTemp++;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                  Center(
+                    child: Text(
+                      'Adjustment length',
+                      style: TextStyle(color: Color(0xff749197),fontSize: 13.0,fontFamily: 'Poppins'),
                     ),
                   ),
-                  Card(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Text(
-                              'Minimum Adjustment Temp',
-                              style: TextStyle(fontSize: 17.0),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                RoundIconButton(
-                                  icon: FontAwesomeIcons.minus,
-                                  onPress: () {
-                                    setState(() {
-                                      minAdjustedTemp--;
-                                    });
-                                  },
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: Text(
-                                    '$minAdjustedTemp°C',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                RoundIconButton(
-                                  icon: FontAwesomeIcons.plus,
-                                  onPress: () {
-                                    setState(() {
-                                      minAdjustedTemp++;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                  Center(
+                    child: Text(
+                      '${adjustementLength.toString()}m',
+                      style: TextStyle(color: Colors.white, fontSize: 32.0,fontFamily: 'Poppins',fontWeight: FontWeight.w600),
                     ),
                   ),
-                  Card(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Text(
-                              'Weld gap',
-                              style: TextStyle(fontSize: 17.0),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                RoundIconButton(
-                                  icon: FontAwesomeIcons.minus,
-                                  onPress: () {
-                                    setState(() {
-                                      weldGap--;
-                                    });
-                                  },
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: Text(
-                                    '${weldGap.toInt()}mm',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                RoundIconButton(
-                                  icon: FontAwesomeIcons.plus,
-                                  onPress: () {
-                                    setState(() {
-                                      weldGap++;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  SliderTheme(data: SliderTheme.of(context).copyWith(
+
                   ),
+                    child: Slider(
+                        activeColor: Color(0xff5eb533),
+                        min: 0,
+                        max: 1000,
+                        value: adjustementLength.toDouble(),
+                        onChanged: (double value) {
+                          setState(() {
+                            adjustementLength = value.toInt();
+                          });
+                        }),
+                  ),
+                  SizedBox(height: 20.0,),
                   Container(
-                    height: 230.0,
-                    width: 350.0,
-                    decoration: BoxDecoration(border: Border.all(width: 0.8,color: Color(0xffd2d2d2)),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: ListView(
-                        children: getListView(),
-                      ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                        color: Colors.white),
+                    child: Column(
+
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          child: Text('Other Adjustments'),
+                        ),
+                        Card(
+                          elevation: 0.0,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(left:15.0),
+                                  child: Text(
+                                    'Neutral Temp:',
+                                    style: TextStyle(fontSize: 15.0,fontFamily: 'Poppins'),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      RoundIconButton(iconColor: Color(0xffaeaeae),
+                                        icon: FontAwesomeIcons.minus,
+                                        onPress: () {
+                                          setState(() {
+                                            neutralTemp--;
+                                          });
+                                        },
+                                      ),
+                                      Text(
+                                        '$neutralTemp',
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      RoundIconButton(iconColor: Color(0xff37b033),
+                                        icon: FontAwesomeIcons.plus,
+                                        onPress: () {
+                                          setState(() {
+                                            neutralTemp++;
+
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(indent: 20.0,
+                          endIndent: 25.0,
+
+                          color: Color(0xffECECEC),
+                        ),
+                        Card(
+                          elevation: 0.0,
+                          child: Row(
+                            children: [
+                              Expanded(flex: 3,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left:15.0),
+                                  child: Text(
+                                    'Minimum Adjustment Temp',
+                                    style: TextStyle(fontSize: 15.0,fontFamily: 'Poppins'),
+                                  ),
+                                ),
+                              ),
+                              Expanded(flex: 2,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      RoundIconButton(iconColor: Color(0xffaeaeae),
+                                        icon: FontAwesomeIcons.minus,
+                                        onPress: () {
+                                          setState(() {
+                                            minAdjustedTemp--;
+                                          });
+                                        },
+                                      ),
+                                      Text(
+                                        '$minAdjustedTemp',
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      RoundIconButton(iconColor: Color(0xff37b033),
+                                        icon: FontAwesomeIcons.plus,
+                                        onPress: () {
+                                          setState(() {
+                                            minAdjustedTemp++;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(indent: 20.0,
+                          endIndent: 25.0,
+
+                          color: Color(0xffECECEC),
+                        ),
+                        Card(
+                          elevation: 0.0,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(left:15.0),
+                                  child: Text(
+                                    'Weld gap',
+                                    style: TextStyle(fontSize: 15.0,fontFamily: 'Poppins'),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      RoundIconButton(iconColor: Color(0xffaeaeae),
+                                        icon: FontAwesomeIcons.minus,
+                                        onPress: () {
+                                          setState(() {
+                                            weldGap--;
+                                          });
+                                        },
+                                      ),
+                                      Text(
+                                        '${weldGap}mm',
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      RoundIconButton(iconColor: Color(0xff37b033),
+                                        icon: FontAwesomeIcons.plus,
+                                        onPress: () {
+                                          setState(() {
+                                            weldGap++;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 200.0,
+                          width: 327.0,
+                          decoration: BoxDecoration(border: Border.all(width: 0.8,color: Color(0xffd2d2d2),),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0),
+                            ),
+
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(25.0),
+                            child: ListView(padding: EdgeInsets.all(0.0),
+                              children: getListView(),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   )
-                ],
-              ),
-            )
+                ],        ),
+            ),
           ],
         ),
       ),
@@ -283,20 +339,39 @@ class _XDCalcState extends State<XDCalc> {
 
 List<Card> getListView() {
   List<Card> listItems = [];
-  for (int i = 0; i <= neutralTemp - minAdjustedTemp; i++) {
+  for (int i = 0; i < (neutralTemp - minAdjustedTemp); i++) {
     double _requiredPull =
-        ((neutralTemp + i) - minAdjustedTemp) * adjustementLength * 0.0115;
+        ((neutralTemp - i) - minAdjustedTemp) * adjustementLength * 0.0115;
     var itemTemp = Card(
-
+      elevation: 0.0,
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Rai Temperature: ${minAdjustedTemp + i}°C',
-              style: TextStyle(fontSize: 25.0)),
+          Row(
+            children: [
+              Expanded(flex: 4,
+                child: Text('Rail Temperature',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 15,
+                    color: const Color(0xff1a1a1a),
+                  ),),
+              ),
+              Expanded(flex: 1,
+                child: Text('${minAdjustedTemp.toDouble() + i}',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: const Color(0xff1f7f59),
+                    fontWeight: FontWeight.w600,
+                  ),),
+              )
+            ],
+          ),
           Text(
-            'Required Pull: ${_requiredPull.floor()}mm',
-            style: TextStyle(fontSize: 15.0),
+            'Required Pull: ${_requiredPull.ceil()}mm',
+            style: TextStyle(fontSize: 13.0,fontFamily: 'Poppins',fontWeight: FontWeight.w300,),
           ),
         ],
       ),
@@ -305,3 +380,5 @@ List<Card> getListView() {
   }
   return listItems;
 }
+
+

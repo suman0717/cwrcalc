@@ -1,12 +1,18 @@
+import 'package:cwrcalc/XDCalc.dart';
 import 'package:cwrcalc/XDMenu.dart';
+import 'package:cwrcalc/XDPreloader.dart';
 import 'package:cwrcalc/XDSignIn.dart';
+import 'package:cwrcalc/XDSignUp.dart';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 void main() => runApp(MaterialApp(
-  title: 'EasyRail',
-  home: MyApp(),
-));
+      theme: ThemeData().copyWith(
+        primaryColor: Color(0xff02414d),
+      ),
+      title: 'EasyRail',
+      home: MyApp(),
+    ));
 
 class MyApp extends StatefulWidget {
   @override
@@ -16,8 +22,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return SplashScreen(seconds: 3,
-    image: Image.asset('images/erwhite.png'),
+    return SplashScreen(
+      seconds: 2,
+      image: Image.asset('images/erwhite.png'),
       gradientBackground: LinearGradient(
         begin: Alignment(-1.43, -1.02),
         end: Alignment(1.17, 1.0),
@@ -31,7 +38,7 @@ class _MyAppState extends State<MyApp> {
       ),
       loaderColor: Color(0xff5eb533),
       photoSize: 150.0,
-      navigateAfterSeconds: XDMenu(),
+      navigateAfterSeconds: XDSignIn(),
     );
   }
 }
