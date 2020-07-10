@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "192986971366",
+    "firebase_url": "https://cwrcalc.firebaseio.com",
+    "project_id": "cwrcalc",
+    "storage_bucket": "cwrcalc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192986971366:android:5a76b05919936c7f1b8f27",
+        "android_client_info": {
+          "package_name": "com.ethink.cwrcalc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192986971366-hnpp44a889ophptqp9mjie0o394ipqft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVoFv-hYZH7q-hoK1aZwSh1pBzlWTYn74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192986971366-hnpp44a889ophptqp9mjie0o394ipqft.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

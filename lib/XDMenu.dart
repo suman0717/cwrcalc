@@ -1,9 +1,12 @@
 import 'package:cwrcalc/XDCalc.dart';
 import 'package:cwrcalc/alert.dart';
+import 'package:cwrcalc/bottomBar.dart';
 import 'package:cwrcalc/rounded_button.dart';
+import 'package:cwrcalc/users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class XDMenu extends StatefulWidget {
   @override
@@ -11,7 +14,25 @@ class XDMenu extends StatefulWidget {
 }
 
 class _XDMenuState extends State<XDMenu> {
-  int _selectedIndex = 0;
+  final _auth = FirebaseAuth.instance;
+  FirebaseUser loggedinUser;
+
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+  void getCurrentUser() async{
+    try{
+      final user = await _auth.currentUser();
+      loggedinUser = user;
+      print(loggedinUser.email);
+    }
+    catch(e){
+      print(e);
+    }
+  }
 
   void showAlert(){
     showDialog(context: context,
@@ -23,47 +44,13 @@ class _XDMenuState extends State<XDMenu> {
     );
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if(index!=2){
-        showAlert();}
-    },);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.info,
-                size: 20.0,
-              ),
-              title: Text('Info'),
+      child:
+      Scaffold(
+        bottomNavigationBar: BottomBar(),
 
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.drafts,
-                size: 20.0,
-              ),
-              title: Text('Support'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.account_circle,
-                size: 20.0,
-              ),
-              title: Text('Account'),
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Color(0xff37b033),
-          onTap: _onItemTapped,
-        ),
         backgroundColor: const Color(0xffffffff),
         body: Stack(
           alignment: Alignment.center,
@@ -116,7 +103,8 @@ class _XDMenuState extends State<XDMenu> {
                           child: MaterialButton(
                             elevation: 10.0,
                             onPressed: () {
-                              showAlert();
+//                              showAlert();
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>User()));
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),

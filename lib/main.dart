@@ -1,5 +1,6 @@
 import 'package:cwrcalc/XDCalc.dart';
 import 'package:cwrcalc/XDMenu.dart';
+import 'package:cwrcalc/XDMyAccount.dart';
 import 'package:cwrcalc/XDPreloader.dart';
 import 'package:cwrcalc/XDSignIn.dart';
 import 'package:cwrcalc/XDSignUp.dart';
@@ -8,7 +9,7 @@ import 'package:splashscreen/splashscreen.dart';
 
 void main() => runApp(MaterialApp(
       theme: ThemeData().copyWith(
-        primaryColor: Color(0xff02414d),
+        accentColor: Colors.white
       ),
       title: 'EasyRail',
       home: MyApp(),
